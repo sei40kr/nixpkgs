@@ -47,10 +47,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installBin bin/sk-tmux
     install -D -m 444 plugin/skim.vim -t $vim/plugin
-    install -D -m 444 shell/* -t $out/share/skim
+    install -D -m 444 shell/key-bindings.{bash,fish,zsh} -t $out/share/skim
 
     installBin sk-share
     installManPage $(find man -type f)
+    installShellCompletion --cmd sk --bash shell/completion.bash
+    installShellCompletion --cmd sk --zsh shell/completion.zsh
   '';
 
   # Doc tests are broken on aarch64
@@ -70,6 +72,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       dywedir
       getchoo
+      sei40kr
     ];
     mainProgram = "sk";
   };
